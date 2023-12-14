@@ -194,9 +194,66 @@ btn_pseudo = tk.Button(sidebar,
                                             175: (255, 255, 0)})))
 btn_pseudo.place(x=14, y=fpseudo+20)
 
+# Estatísticas de Ordem #
+
+fordem = fpseudo + 65
+sidebar.create_text(
+    14.0,
+    fordem,
+    anchor="nw",
+    text="Estatísticas de Ordem",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_media = tk.Button(sidebar,
+                       text='Média',
+                       width=6,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media)))
+btn_media.place(x=14, y=fordem+20)
+
+btn_mediana = tk.Button(sidebar,
+                       text='Mediana',
+                       width=6,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.mediana)))
+btn_mediana.place(x=90, y=fordem+20)
+
+btn_max = tk.Button(sidebar,
+                       text='Máx',
+                       width=6,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.max)))
+btn_max.place(x=165, y=fordem+20)
+
+btn_min = tk.Button(sidebar,
+                       text='Min',
+                       width=6,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.min)))
+btn_min.place(x=240, y=fordem+20)
+
+btn_laplace = tk.Button(sidebar,
+                       text='Laplace',
+                       width=6,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.laplaciano)))
+btn_laplace.place(x=315, y=fordem+20)
+
 # Fourier #
 
-fourier_y = fpseudo + 65
+fourier_y = fordem + 65
 sidebar.create_text(
     14.0,
     fourier_y,
