@@ -121,9 +121,85 @@ header.create_rectangle(
 
 # Widgets - Sidebar
 
+fespacial_y = 5
 sidebar.create_text(
     14.0,
-    5.0,
+    fespacial_y,
+    anchor="nw",
+    text="Filtragem (Espacial)",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_gama = tk.Button(sidebar,
+                     text='Gama',
+                     width=6,
+                     height=1,
+                     bg="#5555FF",
+                     fg="white",
+                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_gama.place(x=14, y=fespacial_y+20)
+
+btn_contraste = tk.Button(sidebar,
+                          text='Contraste',
+                          width=6,
+                          height=1,
+                          bg="#5555FF",
+                          fg="white",
+                          command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+btn_contraste.place(x=90, y=fespacial_y+20)
+
+btn_planobits = tk.Button(sidebar,
+                          text='Plano de Bits',
+                          width=8,
+                          height=1,
+                          bg="#5555FF",
+                          fg="white",
+                          command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+btn_planobits.place(x=165, y=fespacial_y+20)
+
+btn_hist = tk.Button(sidebar,
+                     text='Histograma',
+                     width=6,
+                     height=1,
+                     bg="#5555FF",
+                     fg="white",
+                     command=lambda: display_result(h.equalizacao(file_array)))
+btn_hist.place(x=255, y=fespacial_y+20)
+
+# PSEUDOCORES #
+
+fpseudo = fespacial_y + 65
+sidebar.create_text(
+    14.0,
+    fpseudo,
+    anchor="nw",
+    text="Pseudocores",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_pseudo = tk.Button(sidebar,
+                       text='Pseudocores',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(
+                           p.fatiamento(file_array,
+                                        levels={
+                                            50: (0, 255, 0),
+                                            100: (0, 0, 255),
+                                            150: (255, 0, 0),
+                                            175: (255, 255, 0)})))
+btn_pseudo.place(x=14, y=fpseudo+20)
+
+# Fourier #
+
+fourier_y = fpseudo + 65
+sidebar.create_text(
+    14.0,
+    fourier_y,
     anchor="nw",
     text="Fourier",
     fill="#000000",
@@ -137,7 +213,7 @@ btn_dft = tk.Button(sidebar,
                     bg="#5555FF",
                     fg="white",
                     command=lambda: display_result(t.adjust_scale(np.log(abs(fourier.fft(file_array))))))
-btn_dft.place(x=14, y=30)
+btn_dft.place(x=14, y=fourier_y+20)
 
 btn_idft = tk.Button(sidebar,
                      text='IDFT',
@@ -146,7 +222,7 @@ btn_idft = tk.Button(sidebar,
                      bg="#5555FF",
                      fg="white",
                      command=lambda: display_result(fourier.ifft(fourier.fft(file_array))))
-btn_idft.place(x=90, y=30)
+btn_idft.place(x=90, y=fourier_y+20)
 
 # Widgets - Content
 
@@ -160,6 +236,8 @@ content.create_text(
 )
 
 file_array = sk.io.imread("images/noimage.jpg")
+if len(file_array.shape) > 2:
+    file_array = t.adjust_scale(rgb2gray(file_array))
 image_file = Image.fromarray(file_array)
 
 src_img = ImageTk.PhotoImage(image_file.resize(adjust_height(image_file.size)))
@@ -178,8 +256,8 @@ content.create_text(
     font=("RobotoRoman Regular", 16 * -1)
 )
 
-prc_img_1 = ImageTk.PhotoImage(image_file.resize(
-    adjust_height(image_file.size, max_height=200)))
+prc_img_1 = ImageTk.PhotoImage(
+    image_file.resize(adjust_height(image_file.size)))
 image2_id = content.create_image(
     20,
     480,
