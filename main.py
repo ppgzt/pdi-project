@@ -335,6 +335,7 @@ tk.Label(sidebar, text="Raio: ", bg=bg_color).place(x=14, y=frequencia_y+55)
 
 global e1
 e1 = tk.Entry(sidebar, width=11)
+e1.insert(0, "0.5")
 e1.place(x=14, y=frequencia_y+75)
 
 # Restauração de Imagens #
