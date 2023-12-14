@@ -11,22 +11,27 @@ from pdi import transformation as t
 from pdi import histograma as h
 from pdi import pseudocores as p
 from pdi import filtragem as filt
+from pdi import fourier
 
 # Functions
 
+
 def adjust_height(size, max_height=350):
-    return tuple([int(max_height/size[1] * x)  for x in size])
+    return tuple([int(max_height/size[1] * x) for x in size])
+
 
 def upload_file():
     global src_img, file_array
-    types = [('Tif Files', '*.tif')]
+    types = [('Tif Files', '*.tif'), ('Webp', '*.webp')]
 
     filename = filedialog.askopenfilename(filetypes=types)
     file_array = sk.io.imread(filename)
 
     img_file = Image.fromarray(file_array)
-    src_img = ImageTk.PhotoImage(img_file.resize((adjust_height(img_file.size))))
+    src_img = ImageTk.PhotoImage(
+        img_file.resize((adjust_height(img_file.size))))
     content.itemconfig(image1_id, image=src_img)
+
 
 def display_result(img_array_1):
     global prc_img_1
@@ -34,9 +39,9 @@ def display_result(img_array_1):
     img_file = Image.fromarray(img_array_1)
     prc_img_1 = ImageTk.PhotoImage(
         img_file.resize((adjust_height(
-            img_file.size, 
-            max_height=200))))
+            img_file.size))))
     content.itemconfig(image2_id, image=prc_img_1)
+
 
 window = tk.Tk()
 
@@ -122,21 +127,21 @@ sidebar.create_text(
 )
 
 btn_dft = tk.Button(sidebar,
-                       text='DFT',
-                       width=6,
-                       height=1,
-                       bg="#5555FF",
-                       fg="white",
-                       command=lambda: display_result(h.equalizacao(file_array)))
+                    text='DFT',
+                    width=6,
+                    height=1,
+                    bg="#5555FF",
+                    fg="white",
+                    command=lambda: display_result(t.adjust_scale(np.log(abs(fourier.fft(file_array))))))
 btn_dft.place(x=14, y=30)
 
 btn_idft = tk.Button(sidebar,
-                       text='IDFT',
-                       width=6,
-                       height=1,
-                       bg="#5555FF",
-                       fg="white",
-                       command=upload_file)
+                     text='IDFT',
+                     width=6,
+                     height=1,
+                     bg="#5555FF",
+                     fg="white",
+                     command=upload_file)
 btn_idft.place(x=90, y=30)
 
 # Widgets - Content
@@ -169,7 +174,8 @@ content.create_text(
     font=("RobotoRoman Regular", 16 * -1)
 )
 
-prc_img_1 = ImageTk.PhotoImage(image_file.resize(adjust_height(image_file.size, max_height=200)))
+prc_img_1 = ImageTk.PhotoImage(image_file.resize(
+    adjust_height(image_file.size, max_height=200)))
 image2_id = content.create_image(
     20,
     480,
