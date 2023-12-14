@@ -47,6 +47,13 @@ def display_result(img_array_1):
     content.itemconfig(image2_id, image=prc_img_1)
 
 
+def to_float(str, default):
+    try:
+        return float(str)
+    except:
+        return default
+
+
 window = tk.Tk()
 
 window.geometry("1440x1024")
@@ -301,7 +308,8 @@ btn_baixa = tk.Button(sidebar,
                       height=1,
                       bg="#5555FF",
                       fg="white",
-                      command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                      command=lambda: display_result(
+                          fourier.low_pass(fourier.fft(file_array), raio=to_float(e1.get(), 0.5))))
 btn_baixa.place(x=14, y=frequencia_y+20)
 
 btn_alta = tk.Button(sidebar,
@@ -310,7 +318,8 @@ btn_alta = tk.Button(sidebar,
                      height=1,
                      bg="#5555FF",
                      fg="white",
-                     command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+                     command=lambda: display_result(
+                         fourier.high_pass(fourier.fft(file_array), raio=to_float(e1.get(), 0.5))))
 btn_alta.place(x=105, y=frequencia_y+20)
 
 btn_notch = tk.Button(sidebar,
@@ -322,9 +331,15 @@ btn_notch = tk.Button(sidebar,
                       command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
 btn_notch.place(x=195, y=frequencia_y+20)
 
+tk.Label(sidebar, text="Raio: ", bg=bg_color).place(x=14, y=frequencia_y+55)
+
+global e1
+e1 = tk.Entry(sidebar, width=11)
+e1.place(x=14, y=frequencia_y+75)
+
 # Restauração de Imagens #
 
-restaura_y = frequencia_y+65
+restaura_y = frequencia_y+110
 sidebar.create_text(
     14.0,
     restaura_y,
