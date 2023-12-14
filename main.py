@@ -5,6 +5,7 @@ import numpy as np
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
 
+from skimage.color import rgb2gray
 from PIL import Image, ImageTk
 
 from pdi import transformation as t
@@ -25,7 +26,10 @@ def upload_file():
     types = [('Tif Files', '*.tif'), ('Webp', '*.webp')]
 
     filename = filedialog.askopenfilename(filetypes=types)
+
     file_array = sk.io.imread(filename)
+    if len(file_array.shape) > 2:
+        file_array = t.adjust_scale(rgb2gray(file_array))
 
     img_file = Image.fromarray(file_array)
     src_img = ImageTk.PhotoImage(
@@ -141,7 +145,7 @@ btn_idft = tk.Button(sidebar,
                      height=1,
                      bg="#5555FF",
                      fg="white",
-                     command=upload_file)
+                     command=lambda: display_result(fourier.ifft(fourier.fft(file_array))))
 btn_idft.place(x=90, y=30)
 
 # Widgets - Content
