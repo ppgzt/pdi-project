@@ -283,6 +283,172 @@ btn_idft = tk.Button(sidebar,
                      command=lambda: display_result(fourier.ifft(fourier.fft(file_array))))
 btn_idft.place(x=90, y=fourier_y+20)
 
+# Filtragem | Frequência #
+
+frequencia_y = fourier_y+65
+sidebar.create_text(
+    14.0,
+    frequencia_y,
+    anchor="nw",
+    text="Filtragem (Frequência)",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_baixa = tk.Button(sidebar,
+                      text='Passa Baixa',
+                      width=8,
+                      height=1,
+                      bg="#5555FF",
+                      fg="white",
+                      command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_baixa.place(x=14, y=frequencia_y+20)
+
+btn_alta = tk.Button(sidebar,
+                     text='Passa Alta',
+                     width=8,
+                     height=1,
+                     bg="#5555FF",
+                     fg="white",
+                     command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+btn_alta.place(x=105, y=frequencia_y+20)
+
+btn_notch = tk.Button(sidebar,
+                      text='Rejeita Notch',
+                      width=8,
+                      height=1,
+                      bg="#5555FF",
+                      fg="white",
+                      command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+btn_notch.place(x=195, y=frequencia_y+20)
+
+# Restauração de Imagens #
+
+restaura_y = frequencia_y+65
+sidebar.create_text(
+    14.0,
+    restaura_y,
+    anchor="nw",
+    text="Restauração de Imagens",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_ruidogaus = tk.Button(sidebar,
+                          text='Ruído Gaus',
+                          width=8,
+                          height=1,
+                          bg="#5555FF",
+                          fg="white",
+                          command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_ruidogaus.place(x=14, y=restaura_y+20)
+
+btn_ruidosal = tk.Button(sidebar,
+                         text='Ruído S&P',
+                         width=8,
+                         height=1,
+                         bg="#5555FF",
+                         fg="white",
+                         command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+btn_ruidosal.place(x=105, y=restaura_y+20)
+
+btn_mediageo = tk.Button(sidebar,
+                         text='Média Geo.',
+                         width=8,
+                         height=1,
+                         bg="#5555FF",
+                         fg="white",
+                         command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+btn_mediageo.place(x=14, y=restaura_y+50)
+
+btn_mediaalfa = tk.Button(sidebar,
+                          text='Média Alfa',
+                          width=8,
+                          height=1,
+                          bg="#5555FF",
+                          fg="white",
+                          command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+btn_mediaalfa.place(x=105, y=restaura_y+50)
+
+# Morfologia #
+
+morfologia_y = restaura_y+95
+sidebar.create_text(
+    14.0,
+    morfologia_y,
+    anchor="nw",
+    text="Morfologia",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_erosao = tk.Button(sidebar,
+                       text='Erosão',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_erosao.place(x=14, y=morfologia_y+20)
+
+btn_dilata = tk.Button(sidebar,
+                       text='Dilatação',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+btn_dilata.place(x=105, y=morfologia_y+20)
+
+btn_abertura = tk.Button(sidebar,
+                         text='Abertura',
+                         width=8,
+                         height=1,
+                         bg="#5555FF",
+                         fg="white",
+                         command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_abertura.place(x=195, y=morfologia_y+20)
+
+btn_fechamento = tk.Button(sidebar,
+                           text='Fechamento',
+                           width=8,
+                           height=1,
+                           bg="#5555FF",
+                           fg="white",
+                           command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_fechamento.place(x=285, y=morfologia_y+20)
+
+img_es01 = tk.PhotoImage('assets/images/es_01.jpeg')
+# photoimage = img_es01.subsample(100, 100)
+
+btn_es01 = tk.Button(sidebar,
+                     height=78,
+                     width=78,
+                     image=img_es01,
+                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_es01.place(x=14, y=morfologia_y+55)
+
+btn_es02 = tk.Button(sidebar,
+                     height=78,
+                     width=78,
+                     image=img_es01,
+                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_es02.place(x=105, y=morfologia_y+55)
+
+btn_es03 = tk.Button(sidebar,
+                     height=78,
+                     width=78,
+                     image=img_es01,
+                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_es03.place(x=195, y=morfologia_y+55)
+
+btn_es04 = tk.Button(sidebar,
+                     height=78,
+                     width=78,
+                     image=img_es01,
+                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+btn_es04.place(x=285, y=morfologia_y+55)
+
 # Widgets - Content
 
 content.create_text(
