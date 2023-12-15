@@ -13,6 +13,7 @@ from pdi import histograma as h
 from pdi import pseudocores as p
 from pdi import filtragem as filt
 from pdi import fourier
+from pdi import ruido
 
 # Functions
 
@@ -356,7 +357,7 @@ btn_ruidogaus = tk.Button(sidebar,
                           height=1,
                           bg="#5555FF",
                           fg="white",
-                          command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                          command=lambda: display_result(ruido.gauss(file_array)))
 btn_ruidogaus.place(x=14, y=restaura_y+20)
 
 btn_ruidosal = tk.Button(sidebar,
@@ -365,7 +366,7 @@ btn_ruidosal = tk.Button(sidebar,
                          height=1,
                          bg="#5555FF",
                          fg="white",
-                         command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+                         command=lambda: display_result(ruido.s_p(file_array)))
 btn_ruidosal.place(x=105, y=restaura_y+20)
 
 btn_mediageo = tk.Button(sidebar,
@@ -374,7 +375,7 @@ btn_mediageo = tk.Button(sidebar,
                          height=1,
                          bg="#5555FF",
                          fg="white",
-                         command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+                         command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_geo)))
 btn_mediageo.place(x=14, y=restaura_y+50)
 
 btn_mediaalfa = tk.Button(sidebar,
@@ -383,7 +384,7 @@ btn_mediaalfa = tk.Button(sidebar,
                           height=1,
                           bg="#5555FF",
                           fg="white",
-                          command=lambda: display_result(t.plano_bits(f=file_array, plan=5)))
+                          command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
 btn_mediaalfa.place(x=105, y=restaura_y+50)
 
 # Morfologia #
