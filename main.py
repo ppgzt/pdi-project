@@ -4,6 +4,7 @@ import numpy as np
 
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
+from tkinter import messagebox
 
 from skimage.color import rgb2gray
 from PIL import Image, ImageTk
@@ -14,6 +15,7 @@ from pdi import pseudocores as p
 from pdi import filtragem as filt
 from pdi import fourier
 from pdi import ruido
+from pdi import morfologia as m
 
 # Functions
 
@@ -24,7 +26,8 @@ def adjust_height(size, max_height=350):
 
 def upload_file():
     global src_img, file_array
-    types = [('Tif Files', '*.tif'), ('Webp', '*.webp')]
+    types = [('Tif Files', '*.tif'), ('Webp', '*.webp'),
+             ('Png', '*.png'), ('Jpg', '*.jpg')]
 
     filename = filedialog.askopenfilename(filetypes=types)
 
@@ -53,6 +56,33 @@ def to_float(str, default):
         return float(str)
     except:
         return default
+
+
+def set_element(index):
+    global elemento
+    elements = {
+        1: np.array([
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 1, 0]
+        ]),
+        2: np.array([
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1]
+        ]),
+        3: np.array([
+            [0, 1, 0],
+            [0, 1, 0],
+            [0, 1, 0]
+        ]),
+        4: np.array([
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ])
+    }
+    elemento = elements[index]
 
 
 window = tk.Tk()
@@ -405,7 +435,8 @@ btn_erosao = tk.Button(sidebar,
                        height=1,
                        bg="#5555FF",
                        fg="white",
-                       command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                       command=lambda: display_result(
+                           t.adjust_scale(m.erosao(file_array, elemento))))
 btn_erosao.place(x=14, y=morfologia_y+20)
 
 btn_dilata = tk.Button(sidebar,
@@ -414,7 +445,8 @@ btn_dilata = tk.Button(sidebar,
                        height=1,
                        bg="#5555FF",
                        fg="white",
-                       command=lambda: display_result(t.alargamento(file_array, lim0=(50, 0), limL=(200, 255))))
+                       command=lambda: display_result(
+                           t.adjust_scale(m.dilatacao(file_array, elemento))))
 btn_dilata.place(x=105, y=morfologia_y+20)
 
 btn_abertura = tk.Button(sidebar,
@@ -423,7 +455,8 @@ btn_abertura = tk.Button(sidebar,
                          height=1,
                          bg="#5555FF",
                          fg="white",
-                         command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                         command=lambda: display_result(
+                             t.adjust_scale(m.abertura(file_array, elemento))))
 btn_abertura.place(x=195, y=morfologia_y+20)
 
 btn_fechamento = tk.Button(sidebar,
@@ -432,8 +465,16 @@ btn_fechamento = tk.Button(sidebar,
                            height=1,
                            bg="#5555FF",
                            fg="white",
-                           command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                           command=lambda: display_result(
+                               t.adjust_scale(m.fechamento(file_array, elemento))))
 btn_fechamento.place(x=285, y=morfologia_y+20)
+
+elemento = np.array([
+    [0, 1, 0],
+    [1, 1, 1],
+    [0, 1, 0]
+])
+
 
 es01_file = Image.fromarray(sk.io.imread("assets/images/es_01.jpeg"))
 img_es01 = ImageTk.PhotoImage(es01_file.resize(
@@ -442,7 +483,7 @@ img_es01 = ImageTk.PhotoImage(es01_file.resize(
 btn_es01 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es01,
-                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                     command=lambda: set_element(1))
 btn_es01.place(x=14, y=morfologia_y+55)
 
 es02_file = Image.fromarray(sk.io.imread("assets/images/es_02.jpeg"))
@@ -452,7 +493,7 @@ img_es02 = ImageTk.PhotoImage(es02_file.resize(
 btn_es02 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es02,
-                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                     command=lambda: set_element(2))
 btn_es02.place(x=105, y=morfologia_y+55)
 
 es03_file = Image.fromarray(sk.io.imread("assets/images/es_03.jpeg"))
@@ -462,7 +503,7 @@ img_es03 = ImageTk.PhotoImage(es03_file.resize(
 btn_es03 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es03,
-                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                     command=lambda: set_element(3))
 btn_es03.place(x=195, y=morfologia_y+55)
 
 es04_file = Image.fromarray(sk.io.imread("assets/images/es_04.jpeg"))
@@ -472,7 +513,7 @@ img_es04 = ImageTk.PhotoImage(es04_file.resize(
 btn_es04 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es04,
-                     command=lambda: display_result(t.transf_potencia(file_array, y=0.5)))
+                     command=lambda: set_element(4))
 btn_es04.place(x=285, y=morfologia_y+55)
 
 # Widgets - Content
