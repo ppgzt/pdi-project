@@ -469,6 +469,8 @@ btn_fechamento = tk.Button(sidebar,
                                t.adjust_scale(m.fechamento(file_array, elemento))))
 btn_fechamento.place(x=285, y=morfologia_y+20)
 
+tk.Label(sidebar, text="Escolhe o filtro abaixo: ", bg=bg_color).place(x=14, y=morfologia_y+55)
+
 elemento = np.array([
     [0, 1, 0],
     [1, 1, 1],
@@ -484,7 +486,7 @@ btn_es01 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es01,
                      command=lambda: set_element(1))
-btn_es01.place(x=14, y=morfologia_y+55)
+btn_es01.place(x=14, y=morfologia_y+80)
 
 es02_file = Image.fromarray(sk.io.imread("assets/images/es_02.jpeg"))
 img_es02 = ImageTk.PhotoImage(es02_file.resize(
@@ -494,7 +496,7 @@ btn_es02 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es02,
                      command=lambda: set_element(2))
-btn_es02.place(x=105, y=morfologia_y+55)
+btn_es02.place(x=105, y=morfologia_y+80)
 
 es03_file = Image.fromarray(sk.io.imread("assets/images/es_03.jpeg"))
 img_es03 = ImageTk.PhotoImage(es03_file.resize(
@@ -504,7 +506,7 @@ btn_es03 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es03,
                      command=lambda: set_element(3))
-btn_es03.place(x=195, y=morfologia_y+55)
+btn_es03.place(x=195, y=morfologia_y+80)
 
 es04_file = Image.fromarray(sk.io.imread("assets/images/es_04.jpeg"))
 img_es04 = ImageTk.PhotoImage(es04_file.resize(
@@ -514,7 +516,7 @@ btn_es04 = tk.Button(sidebar,
                      relief='flat',
                      image=img_es04,
                      command=lambda: set_element(4))
-btn_es04.place(x=285, y=morfologia_y+55)
+btn_es04.place(x=285, y=morfologia_y+80)
 
 # Widgets - Content
 
