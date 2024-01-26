@@ -92,10 +92,11 @@ def set_element(index):
 def paint(f, seeds):
     img = f.copy()
     for point in seeds:
-        row, col = draw.circle_perimeter(point[0],point[1],2)
+        row, col = draw.circle_perimeter(point[0], point[1], 2)
         img[row, col] = abs(255 - np.mean(f[row, col]))
-    
+
     return img
+
 
 window = tk.Tk()
 
@@ -172,6 +173,8 @@ header.create_rectangle(
 
 # Widgets - Sidebar
 
+# Filtragem Espacial
+
 fespacial_y = 5
 sidebar.create_text(
     14.0,
@@ -220,7 +223,7 @@ btn_hist.place(x=255, y=fespacial_y+20)
 
 # PSEUDOCORES #
 
-fpseudo = fespacial_y + 65
+fpseudo = fespacial_y + 55
 sidebar.create_text(
     14.0,
     fpseudo,
@@ -247,7 +250,7 @@ btn_pseudo.place(x=14, y=fpseudo+20)
 
 # Estatísticas de Ordem #
 
-fordem = fpseudo + 65
+fordem = fpseudo + 58
 sidebar.create_text(
     14.0,
     fordem,
@@ -306,7 +309,7 @@ btn_laplace.place(x=315, y=fordem+20)
 
 # Fourier #
 
-fourier_y = fordem + 65
+fourier_y = fordem + 58
 sidebar.create_text(
     14.0,
     fourier_y,
@@ -336,7 +339,7 @@ btn_idft.place(x=90, y=fourier_y+20)
 
 # Filtragem | Frequência #
 
-frequencia_y = fourier_y+65
+frequencia_y = fourier_y+58
 sidebar.create_text(
     14.0,
     frequencia_y,
@@ -380,11 +383,11 @@ tk.Label(sidebar, text="Raio: ", bg=bg_color).place(x=14, y=frequencia_y+55)
 global e1
 e1 = tk.Entry(sidebar, width=11)
 e1.insert(0, "0.5")
-e1.place(x=14, y=frequencia_y+75)
+e1.place(x=50, y=frequencia_y+55)
 
 # Restauração de Imagens #
 
-restaura_y = frequencia_y+110
+restaura_y = frequencia_y+85
 sidebar.create_text(
     14.0,
     restaura_y,
@@ -432,7 +435,7 @@ btn_mediaalfa.place(x=285, y=restaura_y+20)
 
 # Morfologia #
 
-morfologia_y = restaura_y+65
+morfologia_y = restaura_y+58
 sidebar.create_text(
     14.0,
     morfologia_y,
@@ -532,9 +535,9 @@ btn_es04 = tk.Button(sidebar,
                      command=lambda: set_element(4))
 btn_es04.place(x=285, y=morfologia_y+80)
 
-# Bordas Canny
+# Segmentação de Imagens
 
-canny_y = morfologia_y+180
+canny_y = morfologia_y+173
 sidebar.create_text(
     14.0,
     canny_y,
@@ -625,10 +628,32 @@ btn_check = tk.Button(sidebar,
                       ))
 btn_check.place(x=330, y=canny_y+82)
 
+# Extração de Carc. | Fronteiras
+
+fronteira_y = canny_y+115
+sidebar.create_text(
+    14.0,
+    fronteira_y,
+    anchor="nw",
+    text="Ext. de Carac. | Fronteira",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_skelet = tk.Button(sidebar,
+                       text='Esquelet.',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(
+                            ext.esqueletizacao(file_array)
+                       ))
+btn_skelet.place(x=14, y=fronteira_y+20)
 
 # Extração de Carc. | Imagens Inteiras
 
-ext_inteira_y = canny_y+115
+ext_inteira_y = fronteira_y+55
 sidebar.create_text(
     14.0,
     ext_inteira_y,

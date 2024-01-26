@@ -3,6 +3,7 @@ import cv2
 
 from skimage.feature import corner_harris, corner_peaks, canny
 from skimage import img_as_ubyte
+from skimage.morphology import skeletonize
 
 
 def dcanny(f):
@@ -36,6 +37,8 @@ def region(f, t=50, seeds=[(2, 1, 100), (2, 3, 200)]):
 
     return g
 
+def esqueletizacao(f):
+    return skeletonize(f)
 
 def hs(f, k=0.17, t=0.05):
     cv_image = img_as_ubyte(f)
