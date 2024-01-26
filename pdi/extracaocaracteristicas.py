@@ -1,8 +1,41 @@
 import numpy as np
 import cv2
 
-from skimage.feature import corner_harris, corner_peaks
+from skimage.feature import corner_harris, corner_peaks, canny
 from skimage import img_as_ubyte
+
+
+def dcanny(f):
+    return canny(f)
+
+
+def region(f, t=50, seeds=[(2, 1, 100), (2, 3, 200)]): 
+    seeds = [(seeds[0][0],seeds[0][1],1), (seeds[1][0],seeds[1][1],2)]
+    g = np.zeros(f.shape)
+
+    processed = []
+    points = seeds
+
+    while len(points) > 0:
+        temp = []
+        for point in points:
+            if point[0] < 1 or point[0] >= f.shape[0]-1 or point[1] < 1 or point[1] >= f.shape[1]-1:
+                continue
+
+            x = point[0]
+            y = point[1]
+
+            neighbors_4 = [(x-1, y), (x, y-1), (x, y+1), (x+1, y)]
+            for n4 in neighbors_4:
+                if n4 not in processed and abs(f[n4] - f[x,y]) <= t:
+                    g[n4] = point[2]
+                    temp.append((n4[0],n4[1], point[2]))
+                    
+                    processed.append(n4)
+        points = temp
+
+    return g
+
 
 def hs(f, k=0.17, t=0.05):
     cv_image = img_as_ubyte(f)
@@ -43,13 +76,14 @@ def hs(f, k=0.17, t=0.05):
 
     return result_image
 
+
 def mser(f, t=0, delta=5, min_area=10000, max_area=30000):
     # Criar um objeto MSER
     mser = cv2.MSER_create()
-    
+
     # Configurar o parâmetro delta
     mser.setDelta(delta)
-    
+
     # Detectar regiões MSER
     cv_image = img_as_ubyte(f)
     regioes, _ = mser.detectRegions(cv_image)

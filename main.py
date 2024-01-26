@@ -7,6 +7,8 @@ from tkinter.filedialog import askopenfile
 from tkinter import messagebox
 
 from skimage.color import rgb2gray
+from skimage import draw
+
 from PIL import Image, ImageTk
 
 from pdi import transformation as t
@@ -87,6 +89,14 @@ def set_element(index):
     elemento = elements[index]
 
 
+def paint(f, seeds):
+    img = f.copy()
+    for point in seeds:
+        row, col = draw.circle_perimeter(point[0],point[1],2)
+        img[row, col] = abs(255 - np.mean(f[row, col]))
+    
+    return img
+
 window = tk.Tk()
 
 window.geometry("1440x1024")
@@ -112,12 +122,13 @@ header.place(x=0, y=0)
 sidebar = tk.Canvas(
     window,
     bg=bg_color,
-    height=850,
+    height=1000,
     width=400,
     bd=0,
     highlightthickness=0,
     relief="ridge"
 )
+
 sidebar.place(x=0, y=90)
 
 content = tk.Canvas(
@@ -528,7 +539,7 @@ sidebar.create_text(
     14.0,
     canny_y,
     anchor="nw",
-    text="Bordas Canny",
+    text="Segmentação de Imagens",
     fill="#000000",
     font=("RobotoRoman Regular", 16 * -1)
 )
@@ -539,7 +550,7 @@ btn_borda = tk.Button(sidebar,
                       height=1,
                       bg="#5555FF",
                       fg="white",
-                      command=lambda: display_result(ruido.gauss(file_array)))
+                      command=lambda: display_result(ext.canny(file_array)))
 btn_borda.place(x=14, y=canny_y+20)
 
 btn_supressao = tk.Button(sidebar,
@@ -569,9 +580,55 @@ btn_limiaralto = tk.Button(sidebar,
                            command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
 btn_limiaralto.place(x=285, y=canny_y+20)
 
+btn_regiao = tk.Button(sidebar,
+                       text='Cres. Região',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(t.adjust_scale(
+                           ext.region(file_array, t=int(regT.get()), seeds=[
+                                      eval(seed1.get()), eval(seed2.get())])
+                       )))
+btn_regiao.place(x=14, y=canny_y+50)
+
+tk.Label(sidebar, text="Seed 1: ", bg=bg_color).place(x=14, y=canny_y+85)
+
+global seed1
+seed1 = tk.Entry(sidebar, width=8)
+seed1.insert(0, "(10,10)")
+seed1.place(x=65, y=canny_y+85)
+
+tk.Label(sidebar, text="Seed 2: ", bg=bg_color).place(x=130, y=canny_y+85)
+
+global seed2
+seed2 = tk.Entry(sidebar, width=8)
+seed2.insert(0, "(120,120)")
+seed2.place(x=180, y=canny_y+85)
+
+tk.Label(sidebar, text="T: ", bg=bg_color).place(x=245, y=canny_y+85)
+
+global regT
+regT = tk.Entry(sidebar, width=8)
+regT.insert(0, "50")
+regT.place(x=260, y=canny_y+85)
+
+btn_check = tk.Button(sidebar,
+                      text='Ver',
+                      width=2,
+                      height=1,
+                      bg="orange",
+                      #    fg="white",
+                      command=lambda: display_result(
+                           paint(file_array, seeds=[
+                                 eval(seed1.get()), eval(seed2.get())])
+                      ))
+btn_check.place(x=330, y=canny_y+82)
+
+
 # Extração de Carc. | Imagens Inteiras
 
-ext_inteira_y = canny_y+65
+ext_inteira_y = canny_y+115
 sidebar.create_text(
     14.0,
     ext_inteira_y,
