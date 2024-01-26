@@ -16,6 +16,7 @@ from pdi import filtragem as filt
 from pdi import fourier
 from pdi import ruido
 from pdi import morfologia as m
+from pdi import reconhecimentodepadroes as rec
 
 # Functions
 
@@ -469,7 +470,8 @@ btn_fechamento = tk.Button(sidebar,
                                t.adjust_scale(m.fechamento(file_array, elemento))))
 btn_fechamento.place(x=285, y=morfologia_y+20)
 
-tk.Label(sidebar, text="Escolhe o filtro abaixo: ", bg=bg_color).place(x=14, y=morfologia_y+55)
+tk.Label(sidebar, text="Escolhe o filtro abaixo: ",
+         bg=bg_color).place(x=14, y=morfologia_y+55)
 
 elemento = np.array([
     [0, 1, 0],
@@ -517,6 +519,97 @@ btn_es04 = tk.Button(sidebar,
                      image=img_es04,
                      command=lambda: set_element(4))
 btn_es04.place(x=285, y=morfologia_y+80)
+
+# Bordas Canny
+
+canny_y = morfologia_y+180
+sidebar.create_text(
+    14.0,
+    canny_y,
+    anchor="nw",
+    text="Bordas Canny",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_borda = tk.Button(sidebar,
+                      text='Borda Canny',
+                      width=8,
+                      height=1,
+                      bg="#5555FF",
+                      fg="white",
+                      command=lambda: display_result(ruido.gauss(file_array)))
+btn_borda.place(x=14, y=canny_y+20)
+
+btn_supressao = tk.Button(sidebar,
+                          text='Supressão',
+                          width=8,
+                          height=1,
+                          bg="#5555FF",
+                          fg="white",
+                          command=lambda: display_result(ruido.s_p(file_array)))
+btn_supressao.place(x=105, y=canny_y+20)
+
+btn_limiarbaixo = tk.Button(sidebar,
+                            text='Limiar Baixo',
+                            width=8,
+                            height=1,
+                            bg="#5555FF",
+                            fg="white",
+                            command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_geo)))
+btn_limiarbaixo.place(x=195, y=canny_y+20)
+
+btn_limiaralto = tk.Button(sidebar,
+                           text='Limiar Alto',
+                           width=8,
+                           height=1,
+                           bg="#5555FF",
+                           fg="white",
+                           command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
+btn_limiaralto.place(x=285, y=canny_y+20)
+
+# Reconhecimento de Padrões
+
+rec_y = canny_y+65
+sidebar.create_text(
+    14.0,
+    rec_y,
+    anchor="nw",
+    text="Rec. de Padrões",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_correlacao = tk.Button(sidebar,
+                           text='Coef. Correl.',
+                           width=8,
+                           height=1,
+                           bg="#5555FF",
+                           fg="white",
+                           command=lambda: display_result(
+                               t.adjust_scale(
+                                   rec.correlacao(
+                                       file_array,
+                                       sk.io.imread(
+                                           "images/praticas/14/b_eye_template.tif"),
+                                       best=False)
+                               )))
+btn_correlacao.place(x=14, y=rec_y+20)
+
+btn_melhor = tk.Button(sidebar,
+                       text='Melhor',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(
+                           t.adjust_scale(
+                               m.dilatacao(rec.correlacao(
+                                   file_array,
+                                   sk.io.imread("images/praticas/14/b_eye_template.tif"), best=True), elemento=elemento)
+
+                           )))
+btn_melhor.place(x=100, y=rec_y+20)
 
 # Widgets - Content
 
