@@ -542,7 +542,7 @@ sidebar.create_text(
     14.0,
     canny_y,
     anchor="nw",
-    text="Segmentação de Imagens",
+    text="11 - Segmentação de Imagens",
     fill="#000000",
     font=("RobotoRoman Regular", 16 * -1)
 )
@@ -556,32 +556,32 @@ btn_borda = tk.Button(sidebar,
                       command=lambda: display_result(ext.canny(file_array)))
 btn_borda.place(x=14, y=canny_y+20)
 
-btn_supressao = tk.Button(sidebar,
-                          text='Supressão',
-                          width=8,
-                          height=1,
-                          bg="#5555FF",
-                          fg="white",
-                          command=lambda: display_result(ruido.s_p(file_array)))
-btn_supressao.place(x=105, y=canny_y+20)
+# btn_supressao = tk.Button(sidebar,
+#                           text='Supressão',
+#                           width=8,
+#                           height=1,
+#                           bg="#5555FF",
+#                           fg="white",
+#                           command=lambda: display_result(ruido.s_p(file_array)))
+# btn_supressao.place(x=105, y=canny_y+20)
 
-btn_limiarbaixo = tk.Button(sidebar,
-                            text='Limiar Baixo',
-                            width=8,
-                            height=1,
-                            bg="#5555FF",
-                            fg="white",
-                            command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_geo)))
-btn_limiarbaixo.place(x=195, y=canny_y+20)
+# btn_limiarbaixo = tk.Button(sidebar,
+#                             text='Limiar Baixo',
+#                             width=8,
+#                             height=1,
+#                             bg="#5555FF",
+#                             fg="white",
+#                             command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_geo)))
+# btn_limiarbaixo.place(x=195, y=canny_y+20)
 
-btn_limiaralto = tk.Button(sidebar,
-                           text='Limiar Alto',
-                           width=8,
-                           height=1,
-                           bg="#5555FF",
-                           fg="white",
-                           command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
-btn_limiaralto.place(x=285, y=canny_y+20)
+# btn_limiaralto = tk.Button(sidebar,
+#                            text='Limiar Alto',
+#                            width=8,
+#                            height=1,
+#                            bg="#5555FF",
+#                            fg="white",
+#                            command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
+# btn_limiaralto.place(x=285, y=canny_y+20)
 
 btn_regiao = tk.Button(sidebar,
                        text='Cres. Região',
@@ -635,7 +635,7 @@ sidebar.create_text(
     14.0,
     fronteira_y,
     anchor="nw",
-    text="Ext. de Carac. | Fronteira",
+    text="12 - Ext. de Carac. | Fronteira",
     fill="#000000",
     font=("RobotoRoman Regular", 16 * -1)
 )
@@ -658,7 +658,7 @@ sidebar.create_text(
     14.0,
     ext_inteira_y,
     anchor="nw",
-    text="Ext. de Carac. | Imagens Inteiras",
+    text="13 - Ext. de Carac. | Imagens Inteiras",
     fill="#000000",
     font=("RobotoRoman Regular", 16 * -1)
 )
@@ -744,7 +744,7 @@ sidebar.create_text(
     14.0,
     rec_y,
     anchor="nw",
-    text="Rec. de Padrões",
+    text="14 - Rec. de Padrões",
     fill="#000000",
     font=("RobotoRoman Regular", 16 * -1)
 )
