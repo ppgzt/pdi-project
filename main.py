@@ -17,6 +17,7 @@ from pdi import fourier
 from pdi import ruido
 from pdi import morfologia as m
 from pdi import reconhecimentodepadroes as rec
+from pdi import extracaocaracteristicas as ext
 
 # Functions
 
@@ -28,7 +29,7 @@ def adjust_height(size, max_height=350):
 def upload_file():
     global src_img, file_array
     types = [('Tif Files', '*.tif'), ('Webp', '*.webp'),
-             ('Png', '*.png'), ('Jpg', '*.jpg')]
+             ('Png', '*.png'), ('Jpg', '*.jpg'), ('Jpeg', '*.jpeg')]
 
     filename = filedialog.askopenfilename(filetypes=types)
 
@@ -407,7 +408,7 @@ btn_mediageo = tk.Button(sidebar,
                          bg="#5555FF",
                          fg="white",
                          command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_geo)))
-btn_mediageo.place(x=14, y=restaura_y+50)
+btn_mediageo.place(x=195, y=restaura_y+20)
 
 btn_mediaalfa = tk.Button(sidebar,
                           text='Média Alfa',
@@ -416,11 +417,11 @@ btn_mediaalfa = tk.Button(sidebar,
                           bg="#5555FF",
                           fg="white",
                           command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
-btn_mediaalfa.place(x=105, y=restaura_y+50)
+btn_mediaalfa.place(x=285, y=restaura_y+20)
 
 # Morfologia #
 
-morfologia_y = restaura_y+95
+morfologia_y = restaura_y+65
 sidebar.create_text(
     14.0,
     morfologia_y,
@@ -568,9 +569,95 @@ btn_limiaralto = tk.Button(sidebar,
                            command=lambda: display_result(filt.filtragem(file_array, filtro=filt.Filtro.media_alfa)))
 btn_limiaralto.place(x=285, y=canny_y+20)
 
+# Extração de Carc. | Imagens Inteiras
+
+ext_inteira_y = canny_y+65
+sidebar.create_text(
+    14.0,
+    ext_inteira_y,
+    anchor="nw",
+    text="Ext. de Carac. | Imagens Inteiras",
+    fill="#000000",
+    font=("RobotoRoman Regular", 16 * -1)
+)
+
+btn_hs = tk.Button(sidebar,
+                   text='HS',
+                   width=8,
+                   height=1,
+                   bg="#5555FF",
+                   fg="white",
+                   command=lambda: display_result(
+                       t.adjust_scale(
+                           ext.hs(file_array, k=float(
+                               hs_K.get()), t=float(hs_T.get()))
+                       )))
+btn_hs.place(x=14, y=ext_inteira_y+20)
+
+tk.Label(sidebar, text="k: ", bg=bg_color).place(x=14, y=ext_inteira_y+55)
+
+global hs_K
+hs_K = tk.Entry(sidebar, width=6)
+hs_K.insert(0, "0.04")
+hs_K.place(x=28, y=ext_inteira_y+55)
+
+tk.Label(sidebar, text="T: ", bg=bg_color).place(x=85, y=ext_inteira_y+55)
+
+global hs_T
+hs_T = tk.Entry(sidebar, width=6)
+hs_T.insert(0, "0.01")
+hs_T.place(x=99, y=ext_inteira_y+55)
+
+btn_melhor = tk.Button(sidebar,
+                       text='MSER',
+                       width=8,
+                       height=1,
+                       bg="#5555FF",
+                       fg="white",
+                       command=lambda: display_result(
+                           ext.mser(file_array,
+                                    t=int(mser_T.get()),
+                                    delta=int(mser_deltaT.get()),
+                                    min_area=int(mser_min.get()),
+                                    max_area=int(mser_max.get()),
+                                    )
+                       ))
+btn_melhor.place(x=14, y=ext_inteira_y+80)
+
+tk.Label(sidebar, text="T: ", bg=bg_color).place(x=14, y=ext_inteira_y+110)
+
+global mser_T
+mser_T = tk.Entry(sidebar, width=6)
+mser_T.insert(0, "0")
+mser_T.place(x=28, y=ext_inteira_y+110)
+
+tk.Label(sidebar, text="deltaT: ", bg=bg_color).place(
+    x=85, y=ext_inteira_y+110)
+
+global mser_deltaT
+mser_deltaT = tk.Entry(sidebar, width=6)
+mser_deltaT.insert(0, "10")
+mser_deltaT.place(x=130, y=ext_inteira_y+110)
+
+tk.Label(sidebar, text="Min: ", bg=bg_color).place(
+    x=185, y=ext_inteira_y+110)
+
+global mser_min
+mser_min = tk.Entry(sidebar, width=8)
+mser_min.insert(0, "10000")
+mser_min.place(x=215, y=ext_inteira_y+110)
+
+tk.Label(sidebar, text="Máx: ", bg=bg_color).place(
+    x=280, y=ext_inteira_y+110)
+
+global mser_max
+mser_max = tk.Entry(sidebar, width=8)
+mser_max.insert(0, "30000")
+mser_max.place(x=310, y=ext_inteira_y+110)
+
 # Reconhecimento de Padrões
 
-rec_y = canny_y+65
+rec_y = ext_inteira_y+145
 sidebar.create_text(
     14.0,
     rec_y,
